@@ -81,21 +81,42 @@ Quote source text directly in each field below. Paraphrase does not satisfy them
 
 **Issue analysis**
 
-[One scored issue, identified by id (`issue-01` through `issue-20`; the `calib-`
-issues are not scored). State your rubric's decision, the gold label, and the
-reasoning that produced your rubric's result.]
+issue-01 (conda/conda). My rubric's decision in run 3: reject. Gold label: accept.
+
+My `maintainer_responsive` rule was looking for a maintainer (someone who runs the
+project) who replied to an outside person within 7 days. In conda's sample none of the
+issues opened by outside people had a maintainer reply, so the rule said there was no
+proof maintainers answer people, and the issue was rejected. But conda is a good issue
+because the project was still active: it pushed code 1 day before capture and released
+a new version 5 days before. The missing replies did not mean the maintainers were gone,
+so I changed `maintainer_responsive` to preferred, and issue-01 agreed with the gold label
+after that.
 
 **Check rationale**
 
-[One check from the `rubric.md` uploaded to `tools/issue-select/`, quoted as it is
-currently written, with the reasoning behind its current form.]
+`unclaimed`, as currently written:
+
+> | unclaimed | Repo-facts "this issue: assignees" and "linked PRs" lines, plus every PR mention and claim comment ("I'll take this", "working on this", "opened PR #...") in the Comments section | No assignee; no open linked PR; no open PR mentioned in the comment thread; and no claim comment dated within 30 days of the capture date | required |
+
+The check reads the comments and not just the assignee box because the comments help
+document the activity on an issue. In calib-04 nobody was assigned, but a commenter said
+they would work on it and then opened PR #3617, so it was really taken. Ideally someone
+would be assigned to help track the work that is done, but people often just comment
+instead, so the check has to read the thread. The 30 days is there because if someone
+said they were going to take an issue months ago and then disappeared, that should not
+block it forever; the issue should reopen to someone else.
 
 **Trade-offs**
 
-[What the quoted check gives up. Any one of these is a complete answer: an issue whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+The 30-day cutoff for claim comments can miss in two directions. If someone commented
+"I'll take this" 10 days ago and then gave up, `unclaimed` still says taken for another
+20 days, so I might skip an issue that is actually free. If someone claimed it 35 days
+ago and is still working without a PR, it says free, and I could end up working on
+something another person is doing. The "too long" case worries me more, because then I
+might skip an issue that is free, and I would rather work on an issue that is left
+unattended than skip it. The short case can be an issue too, and I accept that miss. In
+the eval, `unclaimed` matched all 4 claimed-category issues in every full run (runs 3
+and 6), so the 30-day window did not cost any agreement on the scored set.
 
 ---
 
@@ -107,12 +128,15 @@ This is also the basis for the claim comment you write in Unit 2.
 
 **Selection rationale**
 
-[Answer all three:
-
-1. The issue's fit to your interests and to the time available.
-2. What the verdict identified correctly, and what you weighed that the rubric could
-   not.
-3. The anticipated difficulty in claiming it.]
+1. Fit: I want to work on APIs more, and this issue is a great way to gain some
+   experience with them. It is one test in `tests/unit/test_review_routes.py`, which the
+   skill estimated at 2–3 hours, so it fits the time I have.
+2. The verdict correctly found that nobody has claimed it and that it is one bounded
+   task. What I weighed that the rubric could not: I have written tests before, but I
+   want to gain more experience with them as well, and this issue lets me practice both
+   tests and APIs.
+3. Claiming: I don't think it is going to be too hard. It has 0 comments right now, and
+   either way I am going to figure it out and have fun while learning about it.
 
 ---
 
