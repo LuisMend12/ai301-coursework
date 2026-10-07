@@ -1,0 +1,226 @@
+From 901d4ae72b7101daf97b1a8e1a1a90d40c1aad9f Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Wed, 7 Oct 2026 13:10:19 +0000
+Subject: [PATCH] fix(api): return 422 when a review profile has no sources
+
+POST /reviews created a pending review for a profile with no GitHub
+username, portfolio URL, or resume text, and the background task then
+completed that review with sources_count=0. Reject that case before
+creating the review, and cover it in tests/unit/test_review_routes.py.
+
+Fixes #36
+---
+ api/routes/reviews.py            |  22 +++++-
+ core/services/review_service.py  |  22 ++++++
+ tests/unit/test_review_routes.py | 114 +++++++++++++++++++++++++++++++
+ 3 files changed, 156 insertions(+), 2 deletions(-)
+ create mode 100644 tests/unit/test_review_routes.py
+
+diff --git a/api/routes/reviews.py b/api/routes/reviews.py
+index 3c3a1b4..749cd88 100644
+--- a/api/routes/reviews.py
++++ b/api/routes/reviews.py
+@@ -2,16 +2,19 @@ from uuid import UUID
+ 
+ import structlog
+ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
++from sqlalchemy import select
+ 
+ from api.middleware.auth import get_current_user
+ from api.schemas.review import ReviewCreate, ReviewListResponse, ReviewResponse
+ from core.database import get_db
++from core.models.profile import Profile
+ from core.models.user import User
+ from core.services.review_service import (
+     create_review,
+     get_review,
+     list_reviews,
+     process_review,
++    profile_has_ingestible_content,
+ )
+ 
+ log = structlog.get_logger()
+@@ -28,10 +31,25 @@ async def create_review_endpoint(
+ ):
+     """
+     Create a new review for a profile.
+-    Triggers ingestion pipeline and agent orchestration asynchronously.
+-    Returns review with status="pending" immediately.
++
++    Returns 404 when the profile does not exist and 422 when it has no
++    GitHub username, portfolio URL, or resume text. Otherwise returns the
++    pending review and processes it in the background.
+     """
+     try:
++        profile_result = await db.execute(select(Profile).where(Profile.id == data.profile_id))
++        profile = profile_result.scalars().first()
++        if profile is None:
++            raise HTTPException(
++                status_code=status.HTTP_404_NOT_FOUND,
++                detail="Profile not found",
++            )
++        if not profile_has_ingestible_content(profile):
++            raise HTTPException(
++                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
++                detail="Profile has no ingested documents",
++            )
++
+         # Create review with status="pending"
+         review = await create_review(
+             db=db,
+diff --git a/core/services/review_service.py b/core/services/review_service.py
+index 3f2fb6c..02d531e 100644
+--- a/core/services/review_service.py
++++ b/core/services/review_service.py
+@@ -13,6 +13,28 @@ from core.models.review import Review
+ log = structlog.get_logger()
+ 
+ 
++def profile_has_ingestible_content(profile: Profile) -> bool:
++    """Return True when the profile has a source the ingestion pipeline can read.
++
++    Ingestion reads github_username, portfolio_url, and resume_text. A missing
++    value or a blank string is not ingestible content.
++
++    Args:
++        profile: Profile row, or any object with those three attributes.
++
++    Returns:
++        True if at least one of those fields contains non-blank text.
++    """
++    for value in (
++        getattr(profile, "github_username", None),
++        getattr(profile, "portfolio_url", None),
++        getattr(profile, "resume_text", None),
++    ):
++        if isinstance(value, str) and value.strip():
++            return True
++    return False
++
++
+ async def create_review(
+     db,
+     profile_id: UUID,
+diff --git a/tests/unit/test_review_routes.py b/tests/unit/test_review_routes.py
+new file mode 100644
+index 0000000..afc8f99
+--- /dev/null
++++ b/tests/unit/test_review_routes.py
+@@ -0,0 +1,114 @@
++"""Tests for the review routes."""
++
++from datetime import UTC, datetime
++from types import SimpleNamespace
++from unittest.mock import AsyncMock, Mock
++from uuid import uuid4
++
++import pytest
++from fastapi.testclient import TestClient
++
++from api.main import app
++from api.middleware.auth import get_current_user
++from core.database import get_db
++
++
++class _Result:
++    def __init__(self, obj):
++        self._obj = obj
++
++    def scalars(self):
++        return self
++
++    def first(self):
++        return self._obj
++
++
++def _session(profile):
++    """Build a stand-in db session. Profile queries return `profile`."""
++    created = {}
++    db = AsyncMock()
++    db.add = Mock(side_effect=lambda obj: created.__setitem__("review", obj))
++    db.commit = AsyncMock()
++    db.rollback = AsyncMock()
++
++    async def refresh(obj):
++        if getattr(obj, "id", None) is None:
++            obj.id = uuid4()
++        now = datetime.now(UTC)
++        obj.created_at = getattr(obj, "created_at", None) or now
++        obj.updated_at = getattr(obj, "updated_at", None) or now
++
++    db.refresh = AsyncMock(side_effect=refresh)
++
++    async def execute(stmt):
++        text = str(stmt).lower()
++        if "profiles" in text:
++            return _Result(profile)
++        return _Result(created.get("review"))
++
++    db.execute = AsyncMock(side_effect=execute)
++    return db, created
++
++
++def _post(profile, profile_id):
++    db, created = _session(profile)
++    user = SimpleNamespace(id=uuid4())
++
++    async def override_db():
++        yield db
++
++    app.dependency_overrides[get_current_user] = lambda: user
++    app.dependency_overrides[get_db] = override_db
++    try:
++        response = TestClient(app).post("/reviews", json={"profile_id": str(profile_id)})
++    finally:
++        app.dependency_overrides.clear()
++    return response, created
++
++
++@pytest.mark.unit
++def test_post_reviews_rejects_profile_with_no_ingested_documents():
++    """POST /reviews returns 422 when the profile has nothing to ingest."""
++    profile_id = uuid4()
++    profile = SimpleNamespace(
++        id=profile_id,
++        github_username=None,
++        portfolio_url=None,
++        resume_text=None,
++        resume_filename=None,
++    )
++
++    response, created = _post(profile, profile_id)
++
++    assert response.status_code == 422
++    assert response.json()["detail"] == "Profile has no ingested documents"
++    assert "review" not in created
++
++
++@pytest.mark.unit
++def test_post_reviews_rejects_blank_source_fields():
++    """Blank strings are not ingested documents."""
++    profile_id = uuid4()
++    profile = SimpleNamespace(
++        id=profile_id,
++        github_username="  ",
++        portfolio_url="",
++        resume_text=None,
++        resume_filename=None,
++    )
++
++    response, created = _post(profile, profile_id)
++
++    assert response.status_code == 422
++    assert "review" not in created
++
++
++@pytest.mark.unit
++def test_post_reviews_returns_404_when_profile_is_missing():
++    """The same lookup returns 404 when the profile row does not exist."""
++    response, created = _post(None, uuid4())
++
++    assert response.status_code == 404
++    assert response.json()["detail"] == "Profile not found"
++    assert "review" not in created
+-- 
+2.43.0
+
