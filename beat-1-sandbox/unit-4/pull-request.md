@@ -40,11 +40,14 @@ Two startup attempts before the first completed run were interrupted: Windows cp
 scored). Name it by id, say what your rubric decided and what the gold label said, and
 explain why your rubric read it that way.]
 
+For pkg-11, my skill returned reject while the gold label was accept. The failing check was plan_fidelity. The grader said the description claimed tests for escaped, unescaped, and double-backslash cases, but it only identified escaped and double-backslash cases in the added test. It also flagged ‘One function touched’ because the diff modified one function and added a helper. All other checks passed. I agree with this rejection because shows that we can have the case where the gold label can mislabeled an skill that was rejected as accepted.
 **Check rationale**
 
 [Quote one check from the `rubric.md` you uploaded to `tools/pr-precheck/`, exactly as it reads now.
 Then say why it reads that way â€” what you revised to get there, or what you rejected in
 favour of it.]
+
+| plan_fidelity | Plan context's scope, files, exclusions, and deviations against every diff hunk; description against both | Every added, omitted, or changed behavior is accounted for by the plan or explicit deviation notes, and the description accurately states what this diff delivers and leaves out. An honestly recorded shortfall can pass; claiming completion for missing work or silently expanding scope fails. | required |
 
 **Trade-offs**
 
@@ -52,6 +55,8 @@ favour of it.]
 result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
 stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
 the point in full when the reason follows.]
+
+The trade-off I see is that a strict fidelity check can catch descriptions that overstate the work, but it can also reject a PR over wording that may not affect the fix. Pkg-11 shows this risk: the grader rejected it even though the other four checks passed and gold accepted it. I would change rule because PRs can get rejected only based on its wording that is not a reasonable trade-off and a new rule would help.
 
 ---
 
