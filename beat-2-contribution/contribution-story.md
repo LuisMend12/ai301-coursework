@@ -80,6 +80,10 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
+I tried setting a new rule for the scanner and then found an issue that I wanted to work on.
+
+Claim comment: https://github.com/HARI9037/Shipnote/issues/3#issuecomment-6645358249
+
 [1-2 paragraphs in your own words: how you searched, what your scan
 surfaced, what your scout's verdict said, why this issue fits your
 profile, and what you hope to learn. If your scout's verdict on it
