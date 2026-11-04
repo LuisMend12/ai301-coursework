@@ -55,10 +55,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Working on my PR, fixing an issue on Shipnote**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+I worked on the scout to find more issues, so that was also by setting the rule which set it to number of stars, and of a time range of 7 to 100 days. Nothing really broke, but some of the issues that I wanted to work on got taken by other people. Three of today's scans returned 0 issues before the 7–100 day range worked, which made me change the range of time for the scanner to find issues.
 
 **Unit 6: [one line on the tool work]**
 
@@ -80,7 +79,7 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-I tried setting a new rule for the scanner and then found an issue that I wanted to work on.
+I tried setting a new rule for the scanner and then found an issue that I wanted to work on. I chose this issue because I think it is a good start for me to start contributing to open source projects. I chose an issue and then thought of using the number of stars to filter repos, but I decided to keep working on this issue because it's a good issue to start with.
 
 Claim comment: https://github.com/HARI9037/Shipnote/issues/3#issuecomment-6645358249
 
