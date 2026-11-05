@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: Improve token estimate accuracy
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -7,11 +7,10 @@ the repository is not read. **Keep every section header below under its exact na
 format criteria grade exactly that. Your course repo link is the whole submission: no tool
 files and no evidence uploads are part of Assignment 5.
 
-**Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
-**Issue:** [GitHub issue link]
+**Contribution Number:** 1
+**Student:** Luis Mendez
+**GitHub Username:** LuisMend12
+**Issue:** https://github.com/HARI9037/Shipnote/issues/3
 **Pull Request:** [GitHub PR link, once opened]
 
 One repository, built across units 5 to 8, telling the whole story of your real
@@ -57,7 +56,7 @@ one in the week it belongs to.
 
 **Unit 5: Working on my PR, fixing an issue on Shipnote**
 
-I worked on the scout to find more issues, so that was also by setting the rule which set it to number of stars, and of a time range of 7 to 100 days. Nothing really broke, but some of the issues that I wanted to work on got taken by other people. Three of today's scans returned 0 issues before the 7–100 day range worked, which made me change the range of time for the scanner to find issues.
+I worked on the scout to find more issues, so that was also by setting the rule which set it to number of stars, and of a time range of 7 to 100 days. Nothing really broke, but some of the issues that I wanted to work on got taken by other people. Three of my scans on 2026-11-04 returned 0 issues before the 7–100 day range worked, which made me change the range of time for the scanner to find issues.
 
 **Unit 6: [one line on the tool work]**
 
@@ -79,28 +78,16 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-I tried setting a new rule for the scanner and then found an issue that I wanted to work on. I chose this issue because I think it is a good start for me to start contributing to open source projects. I chose an issue and then thought of using the number of stars to filter repos, but I decided to keep working on this issue because it's a good issue to start with.
+I tried setting a new rule for the scanner and then found an issue that I wanted to work on. I chose this issue because I think it is a good start for me to start contributing to open source projects. I chose an issue and then thought of using the number of stars to filter repos, but I decided to keep working on this issue because it's a good issue to start with. Now the scout rejects Shipnote#3 because the repo has 0 stars, but I still decided to keep working on the issue. I hope to get some experience opening a PR and getting feedback.
 
 Claim comment: https://github.com/HARI9037/Shipnote/issues/3#issuecomment-6645358249
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
-
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout (my search strategy and my rubric); I ran scans with it to find an issue.
+- What it produced: The scout was able to find 100 issues from 39 repos (77 issues from 31 repos after my filters).
+- Difficulties: I think some of them were kind of technical, so I decided to find a more suitable issue to start with.
+- What changed: The rule, to find more issues when I wasn't able to find one.
 
 ---
 
