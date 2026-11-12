@@ -82,6 +82,8 @@ I tried setting a new rule for the scanner and then found an issue that I wanted
 
 Claim comment: https://github.com/HARI9037/Shipnote/issues/3#issuecomment-6645358249
 
+After working on HARI9037/Shipnote#3, and then this issue got closed, I chose this other issue to work on, mila-iqia/cluv#259.
+
 **Toolkit**
 
 - Tool: issue-scout (my search strategy and my rubric); I ran scans with it to find an issue.
