@@ -1,4 +1,4 @@
-# TODO: your title, which says what you did
+# How I added a star rule to my issue scout
 
 ## Overview
 
@@ -42,10 +42,9 @@ From that scan's grade for cluv#259 (`scan-output-6.md`):
 
 > repo_adoption: pass. 32 stars.
 
-<!-- TODO (you): next moments, in order: scan 6 accepting cluv#259 (your result,
-paste "repo_adoption: pass. 32 stars."); moving to #283. -->
+Someone opened a PR so I moved to cluv#283.
 
 ## Limitations and what's next
 
-<!-- TODO (you): a real limit of your work, then what you'd build or change next
-because of it. -->
+The stars are only checked at grading so it wastes grades.
+Next I would check stars during ranking.
