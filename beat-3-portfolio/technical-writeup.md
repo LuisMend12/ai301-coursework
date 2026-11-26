@@ -34,10 +34,12 @@ My rubric's checks before and after (`rubric.md`, 2026-11-04):
 
 In the next scan, the rule rejected 3 repos and accepted cluv#259 with 32 stars.
 
-From that scan's output (`scan-output-6.md`, 2026-11-09):
+From my scan notes (`scan-notes.md`, 2026-11-09):
 
-> The new 20-star rule rejected three of the five (3, 0 and 0 stars)
->
+> Top five graded: only mila-iqia/cluv#259 accepted. The new 20-star rule rejected three of the five (3, 0 and 0 stars)
+
+From that scan's grade for cluv#259 (`scan-output-6.md`):
+
 > repo_adoption: pass. 32 stars.
 
 <!-- TODO (you): next moments, in order: scan 6 accepting cluv#259 (your result,
