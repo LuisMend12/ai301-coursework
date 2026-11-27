@@ -1,4 +1,4 @@
-# Contribution: Improve token estimate accuracy
+# Contribution: Fix local cache race under parallel submits (cluv#283)
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -10,7 +10,7 @@ files and no evidence uploads are part of Assignment 5.
 **Contribution Number:** 1
 **Student:** Luis Mendez
 **GitHub Username:** LuisMend12
-**Issue:** https://github.com/HARI9037/Shipnote/issues/3
+**Issue:** https://github.com/mila-iqia/cluv/issues/283
 **Pull Request:** [GitHub PR link, once opened]
 
 One repository, built across units 5 to 8, telling the whole story of your real
@@ -80,9 +80,11 @@ drafted, what you did with the draft.]
 
 I tried setting a new rule for the scanner and then found an issue that I wanted to work on. I chose this issue because I think it is a good start for me to start contributing to open source projects. I chose an issue and then thought of using the number of stars to filter repos, but I decided to keep working on this issue because it's a good issue to start with. Now the scout rejects Shipnote#3 because the repo has 0 stars, but I still decided to keep working on the issue. I hope to get some experience opening a PR and getting feedback.
 
-Claim comment: https://github.com/HARI9037/Shipnote/issues/3#issuecomment-6645358249
+Claim comment (Shipnote#3): https://github.com/HARI9037/Shipnote/issues/3#issuecomment-6645358249
 
-After working on HARI9037/Shipnote#3, and then this issue got closed, I chose this other issue to work on, mila-iqia/cluv#259.
+Claim comment (cluv#283): https://github.com/mila-iqia/cluv/issues/283#issuecomment-6902054358
+
+I stepped back from Shipnote#3, and I chose this other issue to work on, mila-iqia/cluv#259. Someone opened a PR on cluv#259, so I moved to cluv#283. It had no assignee and no open PR.
 
 **Toolkit**
 
